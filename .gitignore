@@ -1,0 +1,6 @@
+venv
+dist
+build
+.idea
+.vscode
+__pycache__
