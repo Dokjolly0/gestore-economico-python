@@ -132,7 +132,6 @@ def conta_righe_colonna(sheet, colonna_lettera):
             conteggio += 1
     return conteggio
 
-
 def filter_date(date_list, mese: int, anno: int):
     try:
         # Verifica che mese e anno siano interi
@@ -164,6 +163,9 @@ def filter_date(date_list, mese: int, anno: int):
         # Riconverte le date filtrate in stringhe formato 'DD/MM/YYYY'
         return [data.strftime("%d/%m/%Y") for data in filtered_dates]
 
+    except KeyboardInterrupt:
+        print("\nUscita dal programma.")
+        exit()
     except Exception as e:
         print(f"Errore filtra date -> {str(e)}")
 
