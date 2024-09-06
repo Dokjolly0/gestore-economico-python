@@ -13,8 +13,9 @@ def inserisci_entrata(path=r"C:\MyDatabase"):
         print("1- Entrata stipendio pizzeria.")
         print("2- Entrata mance pizzeria.")
         print("3- Entrata stipendio lavoro.")
-        print("4- Altra tipologia di entrata.")
-        choise = validate_input(1, 4)
+        print("4- Versamento contante.")
+        print("5- Altra tipologia di entrata.")
+        choise = validate_input(1, 5)
 
         tipologia = ''
         if choise == 1:
@@ -24,6 +25,8 @@ def inserisci_entrata(path=r"C:\MyDatabase"):
         elif choise == 3:
             tipologia = 'Entrata stipendio lavoro'
         elif choise == 4:
+            tipologia = 'Versamento contante'
+        elif choise == 5:
             tipologia = input("Inserisci la tipologia di entrata: ")
 
         importo = validate_input_float(0, 10000.0, "Inserisci l'importo dell'entrata: ")

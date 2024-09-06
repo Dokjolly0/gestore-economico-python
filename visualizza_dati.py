@@ -36,6 +36,7 @@ def visualizza_dati(path=r"C:\MyDatabase"):
             workbook = openpyxl.load_workbook(full_path)
             # Se esiste, apri il foglio di lavoro attivo
             sheet = workbook.active
+
         except:
             print("Il file Excel non esiste.")
             exit()
@@ -91,13 +92,13 @@ def visualizza_dati(path=r"C:\MyDatabase"):
                 #collection.append(item)
                 index += 1
             except IndexError:
+                print("Fine dati.")
                 break
             except Exception as e:
-                print("Erroreee: ", e)
+                print("Errore: ", e)
                 exit()
 
         print(tabulate.tabulate(collection, headers="keys", tablefmt="grid"))
-        print(collection)
         saldo_totale = round(sum(valore_movimenti), 2)
 
         total = 0

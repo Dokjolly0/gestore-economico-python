@@ -6,7 +6,7 @@ from visualizza_dati import visualizza_dati
 def main():
     print("1- Inserisci entrata.")
     print("2- Inserisci uscita.")
-    print("3- Visualizza dati e saldo.")
+    print("3- Visualizza dati, saldo e salva in Excel.")
     choise = validate_input(1, 3)
     if choise == 1:
         inserisci_entrata()

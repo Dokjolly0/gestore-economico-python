@@ -10,7 +10,24 @@ def inserisci_uscita(path=r"C:\MyDatabase"):
         if not os.path.exists(path):
             print("Path non esistente.")
             exit()
-        tipologia = input("Inserisci una tipologia di uscita: ")
+            
+        print("Inserisci una tipologia di uscita tra le seguenti: ")
+        print("1- Abbonamento online.")
+        print("2- Prelevamento atm.")
+        print("3- Giochi.")
+        print("4- Pagamento amazon.")
+        print("5- Altra tipologia di uscita.")
+        tipologia = validate_input(1, 5, "Inserisci una tipologia di uscita: ")
+        if tipologia == 1:
+            tipologia = 'Abbonamento online'
+        elif tipologia == 2:
+            tipologia = 'Prelevamento atm'
+        elif tipologia == 3:
+            tipologia = 'Giochi'
+        elif tipologia == 4:
+            tipologia = 'Pagamento amazon'
+        elif tipologia == 5:
+            tipologia = input("Inserisci la tipologia di uscita: ")
 
         importo = validate_input_float(0, 100000.0, "Inserisci l'importo dell'uscita: ")
         importo -= importo * 2

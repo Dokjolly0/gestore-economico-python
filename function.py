@@ -3,6 +3,7 @@ import os
 import sys
 import openpyxl
 from openpyxl.styles import PatternFill, Border, Side
+import unicodedata
 
 def exit():
     sys.exit()
@@ -53,6 +54,10 @@ def validate_input_float(start: float, end: float, text = "Scegli un'opzione: ",
             except:
                 continue
 
+# Funzione per rimuovere gli accenti
+def remove_accents(input_str):
+    return ''.join(c for c in unicodedata.normalize('NFD', input_str) if unicodedata.category(c) != 'Mn')
+
 def get_date():
     data_input = input("Inserisci la data di accredito dell'importo o enter per la data attuale (gg/mm/aaaa): ").lower()
     if data_input == '':
@@ -66,37 +71,29 @@ def get_date():
             print("Formato della data non corretto, reinseriscilo.")
             get_date()
 
+def get_day_to_index(index: int):
+    if isinstance(index, int) and 0 <= index <= 6:
+        giorni = ["lunedì", "martedì", "mercoledì", "giovedì", "venerdì", "sabato", "domenica"]
+        return giorni[index]
+
 def get_day():
+    giorni = ["lunedì", "martedì", "mercoledì", "giovedì", "venerdì", "sabato", "domenica"]
     giorno_input = input("Inserisci il giorno della settimana o enter per il giorno attuale: ").lower()
-    giorni = ["lunedi", "lunedì", "martedi", "martedì", "mercoledi", "mercoledì", "giovedi", "giovedì", "venerdi", "venerdì", "sabato", "domenica"]
 
     if giorno_input == '':
         index = datetime.datetime.now().weekday()
         return get_day_to_index(index)
 
-    for giorno in giorni:
-        if giorno_input == giorno:
-            return giorno_input
-    get_day()
+    # Rimuovi gli accenti dall'input
+    giorno_input_normalized = remove_accents(giorno_input)
 
-def get_day_to_index(day):
-    if isinstance(day, int):
-        if day == 0:
-            return "lunedì"
-        elif day == 1:
-            return "martedì"
-        elif day == 2:
-            return "mercoledì"
-        elif day == 3:
-            return "giovedì"
-        elif day == 4:
-            return "venerdì"
-        elif day == 5:
-            return "sabato"
-        elif day == 6:
-            return "domenica"
-        else:
-            return False
+    # Confronta l'input normalizzato con i giorni normalizzati
+    for giorno in giorni:
+        if giorno_input_normalized == remove_accents(giorno):
+            return giorno  # Restituisce il giorno corrispondente
+    # Se nessun giorno corrisponde, mostra un errore
+    print("Giorno non valido, riprova.")
+    return get_day()  # Richiama la funzione per chiedere di nuovo l'input
         
 def ridimensiona_file_excel(sheet):
     # Ridimensiona automaticamente la larghezza delle colonne
