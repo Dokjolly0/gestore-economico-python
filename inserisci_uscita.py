@@ -32,6 +32,13 @@ def inserisci_uscita(path=r"C:\MyDatabase"):
             # Scrivi le intestazioni
             sheet.append(['Tipologia', 'Importo', 'Giorno', 'Data', 'Descrizione'])
 
+        black_border = Border(
+            left=Side(border_style="thin", color="000000"),
+            right=Side(border_style="thin", color="000000"),
+            top=Side(border_style="thin", color="000000"),
+            bottom=Side(border_style="thin", color="000000")
+        )
+
         # Scrivi i dati in una nuova riga
         new_row = [tipologia, importo, giorno, data_format, descrizione]
         # Aggiungi la nuova riga all'intestazione corretta (posizione 0 Tipo, 1 Importo, 2 Giorno, 3 Data, 4 Descrizione)
@@ -41,7 +48,7 @@ def inserisci_uscita(path=r"C:\MyDatabase"):
         fill = PatternFill(start_color="ff0000", end_color="ff0000", fill_type="solid")
         for cell in sheet[sheet.max_row]:
             cell.fill = fill
-
+            cell.border = black_border
         sheet = ridimensiona_file_excel(sheet)
 
         # Salva il file Excel

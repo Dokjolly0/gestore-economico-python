@@ -1,7 +1,8 @@
 import datetime
+import os
 import sys
 import openpyxl
-from openpyxl.styles import PatternFill
+from openpyxl.styles import PatternFill, Border, Side
 
 def exit():
     sys.exit()
@@ -29,13 +30,23 @@ def validate_input(start: int, end: int, text = "Scegli un'opzione: ", exclude_v
             except:
                 continue
             
-def validate_input_float(start: int, end: float, text = "Scegli un'opzione: "):
-    if isinstance(start, int) and isinstance(end, float):
+def validate_input_float(start: float, end: float, text = "Scegli un'opzione: ", exclude_value = None):
+    if (isinstance(start, int) or isinstance(start, float)) and (isinstance(end, int) or isinstance(end, float)):
         while True:
+            choise_input = input(text)
             try:
-                choise = float(input(text)) 
+                choise = float(choise_input)
                 if start <= choise <= end:
                     return choise
+            except ValueError:
+                if choise_input == exclude_value:
+                    if isinstance(exclude_value, list):
+                        for element in exclude_value:
+                            if element == choise_input:
+                                return element
+                    return choise_input
+                else:
+                    continue
             except KeyboardInterrupt:
                 print("\nUscita dal programma.")
                 exit()
@@ -156,7 +167,70 @@ def filter_date(date_list, mese: int, anno: int):
     except Exception as e:
         print(f"Errore filtra date -> {str(e)}")
 
+def salva_excel_visualizzato(data: []):
+    if isinstance(data, list):
+        try:
+            # Nuovo file excel
+            workbook = openpyxl.Workbook()
+            sheet = workbook.active
+            sheet.append(['Tipologia', 'Importo', 'Giorno', 'Data', 'Descrizione'])
 
+            black_border = Border(
+                left=Side(border_style="thin", color="000000"),
+                right=Side(border_style="thin", color="000000"),
+                top=Side(border_style="thin", color="000000"),
+                bottom=Side(border_style="thin", color="000000")
+            )
 
+            for item in data:
+                #Valori da inserire
+                tipologia = item["Tipologia"]
+                importo = item["Importo"]
+                giorno = item["Giorno"]
+                data = item["Data"]
+                descrizione = item["Descrizione"]
+
+                # Scrivi i dati in una nuova riga
+                new_row = [tipologia, importo, giorno, data, descrizione]
+                sheet.append(new_row)
+
+                # Colora le caselle e ridimensiona il file Excel
+                fill = PatternFill(start_color="008f39", end_color="008f39", fill_type="solid")
+                for cell in sheet[sheet.max_row]:
+                    cell.fill = fill
+                    cell.border = black_border
+                sheet = ridimensiona_file_excel(sheet)
+
+            # Salva il file Excel
+            nome = input("Inserisci il nome del file: ")
+            print("Seleziona il percorso dove salvare il file Excel.")
+            print("1- Salva in C:\\MyDatabase")
+            print("2- Salva in nella posizione attuale del file")
+            print("3- Salva in un percorso personalizzato")
+            choise = validate_input(1, 3, "Seleziona un opzione: ")
+            if choise == 1:
+                full_path = os.path.join(r"C:\MyDatabase", nome + ".xlsx")
+                workbook.save(full_path)
+            elif choise == 2:
+                file_path = os.path.abspath(__file__)
+                directory_path = os.path.dirname(file_path)
+                full_path = os.path.join(directory_path, nome + ".xlsx")
+                workbook.save(full_path)
+            elif choise == 3:
+                path = input("Inserisci il percorso: ")
+                while not os.path.exists(path) or not os.path.isdir(path):
+                    print("Percorso non valido.")
+                    path = input("Inserisci il percorso: ")
+                    if os.path.exists(path) and os.path.isdir(path):
+                        break
+                full_path = os.path.join(path, nome + ".xlsx")
+                workbook.save(full_path)
+        except KeyboardInterrupt:
+            print("\nUscita dal programma.")
+            exit()
+        except Exception as e:
+            print(f"Errore salvataggio Excel -> {str(e)}")
+
+#salva_excel_visualizzato([{'Tipologia': 'Entrata stipendio pizzeria', 'Importo': 321, 'Giorno': 'giovedì', 'Data': '05/08/2020', 'Descrizione': 'Mese e anno diversi'}, {'Tipologia': 'Entrata stipendio pizzeria', 'Importo': 123, 'Giorno': 'giovedì', 'Data': '05/08/2024', 'Descrizione': 'Mese diverso anno uguale'}, {'Tipologia': 'Entrata stipendio pizzeria', 'Importo': 12, 'Giorno': 'giovedì', 'Data': '05/09/2024', 'Descrizione': 'Anno e mese uguali'}])
 # date_list = ["05/08/2020", "12/09/2021", "05/08/2020", "01/01/2022", "05/09/2024"]
 # print(filter_date(date_list, 9, 2024))  # Filtra per agosto 2020

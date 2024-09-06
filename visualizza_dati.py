@@ -97,6 +97,7 @@ def visualizza_dati(path=r"C:\MyDatabase"):
                 exit()
 
         print(tabulate.tabulate(collection, headers="keys", tablefmt="grid"))
+        print(collection)
         saldo_totale = round(sum(valore_movimenti), 2)
 
         total = 0
@@ -105,6 +106,11 @@ def visualizza_dati(path=r"C:\MyDatabase"):
         if round(total, 2) != round(sum(valore_movimenti), 2):
             print(f"\nTotale parziale: {round(total, 2)} euro.")
         print(f"Saldo totale: {round(sum(valore_movimenti), 2)} euro.")
+
+        choise = input("Vuoi salvare i dati visualizzati in un file Excel? (y/n) ").lower()
+        if choise == "y" or choise == "s":
+            salva_excel_visualizzato(collection)
+
         return collection
 
     except KeyboardInterrupt:

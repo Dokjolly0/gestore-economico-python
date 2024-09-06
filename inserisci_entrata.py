@@ -1,7 +1,7 @@
 import datetime
 import os
 import openpyxl
-from openpyxl.styles import PatternFill
+from openpyxl.styles import PatternFill, Border, Side
 from function import *
 
 def inserisci_entrata(path=r"C:\MyDatabase"):
@@ -45,18 +45,23 @@ def inserisci_entrata(path=r"C:\MyDatabase"):
             # Scrivi le intestazioni
             sheet.append(['Tipologia', 'Importo', 'Giorno', 'Data', 'Descrizione'])
 
+        black_border = Border(
+            left=Side(border_style="thin", color="000000"),
+            right=Side(border_style="thin", color="000000"),
+            top=Side(border_style="thin", color="000000"),
+            bottom=Side(border_style="thin", color="000000")
+        )
+
         # Scrivi i dati in una nuova riga
         new_row = [tipologia, importo, giorno, data_format, descrizione]
         # Aggiungi la nuova riga all'intestazione corretta (posizione 0 Tipo, 1 Importo, 2 Giorno, 3 Data, 4 Descrizione)
-        #print(f"Sheet prima: {sheet.max_row}")
         sheet.append(new_row)
-        #print(f"Sheet dopo: {sheet.max_row}")
 
         # Applica colore alla nuova riga (es. giallo chiaro)
         fill = PatternFill(start_color="008f39", end_color="008f39", fill_type="solid")
         for cell in sheet[sheet.max_row]:
             cell.fill = fill
-
+            cell.border = black_border
         sheet = ridimensiona_file_excel(sheet)
 
         # Salva il file Excel
