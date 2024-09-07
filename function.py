@@ -8,7 +8,7 @@ import unicodedata
 def exit():
     sys.exit()
 
-def validate_input(start: int, end: int, text = "Scegli un'opzione: ", exclude_value = None):
+def validate_input(start: int, end: int, text: str = "Scegli un'opzione: ", exclude_value = None):
     if isinstance(start, int) and isinstance(end, int):
         while True:
             choise_input = input(text)
@@ -28,10 +28,11 @@ def validate_input(start: int, end: int, text = "Scegli un'opzione: ", exclude_v
             except KeyboardInterrupt:
                 print("\nUscita dal programma.")
                 exit()
-            except:
+            except Exception as e:
+                print(f"Errore validate input: {str(e)}")
                 continue
             
-def validate_input_float(start: float, end: float, text = "Scegli un'opzione: ", exclude_value = None):
+def validate_input_float(start: float, end: float, text: str = "Scegli un'opzione: ", exclude_value = None):
     if (isinstance(start, int) or isinstance(start, float)) and (isinstance(end, int) or isinstance(end, float)):
         while True:
             choise_input = input(text)
@@ -51,7 +52,8 @@ def validate_input_float(start: float, end: float, text = "Scegli un'opzione: ",
             except KeyboardInterrupt:
                 print("\nUscita dal programma.")
                 exit()
-            except:
+            except Exception as e:
+                print(f"Errore validate input: {str(e)}")
                 continue
 
 # Funzione per rimuovere gli accenti
@@ -67,7 +69,7 @@ def get_date():
         try:
             data = datetime.datetime.strptime(data_input, "%d/%m/%Y")
             return data
-        except:
+        except Exception as e:
             print("Formato della data non corretto, reinseriscilo.")
             get_date()
 
